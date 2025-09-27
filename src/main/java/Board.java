@@ -3,6 +3,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -27,11 +28,11 @@ public class Board extends JPanel implements Runnable, Commons {
 	private static final long serialVersionUID = 1L;
 
 	private Dimension d;
-	private ArrayList aliens;
-	private Player player;
-	private Shot shot;
-	private GameOver gameend;
-	private Won vunnet;
+	private ArrayList<Sprite> aliens; // changed declaration type to Sprite
+	private Sprite player;            // changed declaration type to Sprite
+	private Sprite shot;              // changed declaration type to Sprite
+	private Sprite gameend;           // changed declaration type to Sprite
+	private Sprite vunnet;            // changed declaration type to Sprite
 
 	private int alienX = 150;
 	private int alienY = 25;
@@ -64,33 +65,60 @@ public class Board extends JPanel implements Runnable, Commons {
 		gameInit();
 	}
 
-	public void gameInit() {
-		aliens = new ArrayList();
+	// public void gameInit() {
+	// 	aliens = new ArrayList<Sprite>(); // added <Sprite> for generic type
 
-		ImageIcon ii = new ImageIcon(this.getClass().getResource(alienpix));
+	// 	ImageIcon ii = new ImageIcon(this.getClass().getResource(alienpix));
 
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 6; j++) {
-				Alien alien = new Alien(alienX + 18 * j, alienY + 18 * i);
-				alien.setImage(ii.getImage());
-				aliens.add(alien);
-			}
-		}
+	// 	for (int i = 0; i < 4; i++) {
+	// 		for (int j = 0; j < 6; j++) {
+	// 			Sprite alien = SpriteFactory.createSprite("alien", alienX + 18 * j, alienY + 18 * i); // used factory instead of new Alien()
+	// 			alien.setImage(ii.getImage());
+	// 			aliens.add(alien);
+	// 		}
+	// 	}
 
-		player = new Player();
-		shot = new Shot();
+	// 	player = SpriteFactory.createSprite("player", 0, 0); // used factory instead of new Player()
+	// 	shot = SpriteFactory.createSprite("shot", 0, 0); // used factory instead of new Shot()
+
+	// 	if (animator == null || !ingame) {
+	// 		animator = new Thread(this);
+	// 		animator.start();
+	// 	}
+	// }
+
+public void gameInit() {
+    aliens = new ArrayList<Sprite>(); // added <Sprite> for generic type
+
+    ImageIcon ii = new ImageIcon(this.getClass().getResource(alienpix));
+    Image alienImg = ii.getImage();
+
+    SpriteFactory.initPrototypeAlien(alienX, alienY, alienImg);
+
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 6; j++) {
+            Sprite alien = (Alien) SpriteFactory.createSprite(
+                "alien",
+                alienX + 18 * j,
+                alienY + 18 * i
+            ); // used factory instead of new Alien()
+            aliens.add(alien); 
+        }
+    }
+	player = SpriteFactory.createSprite("player", 0, 0); // used factory instead of new Player()
+	shot = SpriteFactory.createSprite("shot", 0, 0); // used factory instead of new Shot()
 
 		if (animator == null || !ingame) {
 			animator = new Thread(this);
 			animator.start();
 		}
-	}
+}
 
 	public void drawAliens(Graphics g) {
-		Iterator it = aliens.iterator();
+		Iterator<Sprite> it = aliens.iterator(); // added <Sprite> for casting
 
 		while (it.hasNext()) {
-			Alien alien = (Alien) it.next();
+			Sprite alien = it.next(); // changed declaration type to Sprite
 
 			if (alien.isVisible()) {
 				g.drawImage(alien.getImage(), alien.getX(), alien.getY(), this);
@@ -124,14 +152,14 @@ public class Board extends JPanel implements Runnable, Commons {
 	}
 
 	public void drawBombing(Graphics g) {
-		Iterator i3 = aliens.iterator();
+		Iterator<Sprite> i3 = aliens.iterator(); // added <Sprite> for casting
 
 		while (i3.hasNext()) {
-			Alien a = (Alien) i3.next();
+			Sprite a = i3.next(); // changed declaration type to Sprite
 
-			Bomb b = a.getBomb();
+			Sprite b = ((Alien) a).getBomb(); // added cast (Alien) and changed the delare type to sprite
 
-			if (!b.isDestroyed()) {
+			if (!((Bomb)b).isDestroyed()) { // added the cast (Bomb)
 				g.drawImage(b.getImage(), b.getX(), b.getY(), this);
 			}
 		}
@@ -160,8 +188,8 @@ public class Board extends JPanel implements Runnable, Commons {
 	public void gameOver() {
 		Graphics g = this.getGraphics();
 
-		gameend = new GameOver();
-		vunnet = new Won();
+		gameend = SpriteFactory.createSprite("gameover", 0, 0); // used factory instead of new GameOver()
+		vunnet = SpriteFactory.createSprite("won", 0, 0); // used factory instead of new Won()
 
 		// g.setColor(Color.black);
 		g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGTH);
@@ -187,21 +215,21 @@ public class Board extends JPanel implements Runnable, Commons {
 	public void animationCycle() {
 		if (deaths == NUMBER_OF_ALIENS_TO_DESTROY) {
 			ingame = false;
-			message = "Parabéns! Você salvou a galáxia!";
+			message = "Parabï¿½ns! Vocï¿½ salvou a galï¿½xia!";
 		}
 
 		// player
 
-		player.act();
+		((Player) player).act(); // added cast (Player)
 
 		// shot
 		if (shot.isVisible()) {
-			Iterator it = aliens.iterator();
+			Iterator<Sprite> it = aliens.iterator(); // added <Sprite> for casting
 			int shotX = shot.getX();
 			int shotY = shot.getY();
 
 			while (it.hasNext()) {
-				Alien alien = (Alien) it.next();
+				Sprite alien = it.next(); // changed declaration type to Sprite
 				int alienX = alien.getX();
 				int alienY = alien.getY();
 
@@ -229,17 +257,17 @@ public class Board extends JPanel implements Runnable, Commons {
 
 		// aliens
 
-		Iterator it1 = aliens.iterator();
+		Iterator<Sprite> it1 = aliens.iterator(); // added <Sprite> for casting
 
 		while (it1.hasNext()) {
-			Alien a1 = (Alien) it1.next();
+			Sprite a1 = it1.next(); // changed declaration type to Sprite
 			int x = a1.getX();
 
 			if (x >= BOARD_WIDTH - BORDER_RIGHT && direction != -1) {
 				direction = -1;
-				Iterator i1 = aliens.iterator();
+				Iterator<Sprite> i1 = aliens.iterator(); // added <Sprite> for casting
 				while (i1.hasNext()) {
-					Alien a2 = (Alien) i1.next();
+					Sprite a2 = i1.next(); // changed declaration type to Sprite
 					a2.setY(a2.getY() + GO_DOWN);
 				}
 			}
@@ -247,18 +275,18 @@ public class Board extends JPanel implements Runnable, Commons {
 			if (x <= BORDER_LEFT && direction != 1) {
 				direction = 1;
 
-				Iterator i2 = aliens.iterator();
+				Iterator<Sprite> i2 = aliens.iterator(); // added <Sprite> for casting
 				while (i2.hasNext()) {
-					Alien a = (Alien) i2.next();
+					Sprite a = i2.next(); // changed declaration type to Sprite
 					a.setY(a.getY() + GO_DOWN);
 				}
 			}
 		}
 
-		Iterator it = aliens.iterator();
+		Iterator<Sprite> it = aliens.iterator(); // added <Sprite> for casting
 
 		while (it.hasNext()) {
-			Alien alien = (Alien) it.next();
+			Sprite alien = it.next(); // changed declaration type to Sprite
 			if (alien.isVisible()) {
 
 				int y = alien.getY();
@@ -266,25 +294,25 @@ public class Board extends JPanel implements Runnable, Commons {
 				if (y > GROUND - ALIEN_HEIGHT) {
 					havewon = false;
 					ingame = false;
-					message = "Aliens estão invadindo a galáxia!";
+					message = "Aliens estï¿½o invadindo a galï¿½xia!";
 				}
 
-				alien.act(direction);
+				((Alien) alien).act(direction); // added cast (Alien)
 			}
 		}
 
 		// bombs
 
-		Iterator i3 = aliens.iterator();
+		Iterator<Sprite> i3 = aliens.iterator(); // added <Sprite> for casting
 		Random generator = new Random();
 
 		while (i3.hasNext()) {
 			int shot = generator.nextInt(15);
-			Alien a = (Alien) i3.next();
-			Bomb b = a.getBomb();
-			if (shot == CHANCE && a.isVisible() && b.isDestroyed()) {
+			Sprite a = i3.next(); // changed declaration type to Sprite
+			Sprite b = ((Alien) a).getBomb();  // added cast (Alien)
+			if (shot == CHANCE && a.isVisible() && ((Bomb)b).isDestroyed()) { // added the cast (Bomb)
 
-				b.setDestroyed(false);
+				((Bomb)b).setDestroyed(false); // added the cast (Bomb)
 				b.setX(a.getX());
 				b.setY(a.getY());
 			}
@@ -294,7 +322,7 @@ public class Board extends JPanel implements Runnable, Commons {
 			int playerX = player.getX();
 			int playerY = player.getY();
 
-			if (player.isVisible() && !b.isDestroyed()) {
+			if (player.isVisible() && !((Bomb)b).isDestroyed()) { // added the cast (Bomb)
 				if (bombX >= (playerX) && bombX <= (playerX + PLAYER_WIDTH)
 						&& bombY >= (playerY)
 						&& bombY <= (playerY + PLAYER_HEIGHT)) {
@@ -302,15 +330,15 @@ public class Board extends JPanel implements Runnable, Commons {
 							expl));
 					player.setImage(ii.getImage());
 					player.setDying(true);
-					b.setDestroyed(true);
+					((Bomb)b).setDestroyed(true); // added the cast (Bomb)
 					;
 				}
 			}
 
-			if (!b.isDestroyed()) {
+			if (!((Bomb)b).isDestroyed()) { // added the cast (Bomb)
 				b.setY(b.getY() + 1);
 				if (b.getY() >= GROUND - BOMB_HEIGHT) {
-					b.setDestroyed(true);
+					((Bomb)b).setDestroyed(true); // added the cast (Bomb)
 				}
 			}
 		}
@@ -343,12 +371,12 @@ public class Board extends JPanel implements Runnable, Commons {
 	private class TAdapter extends KeyAdapter {
 
 		public void keyReleased(KeyEvent e) {
-			player.keyReleased(e);
+			((Player) player).keyReleased(e); // added cast (Player)
 		}
 
 		public void keyPressed(KeyEvent e) {
 
-			player.keyPressed(e);
+			((Player) player).keyPressed(e); // added cast (Player)
 
 			int x = player.getX();
 			int y = player.getY();
@@ -358,7 +386,7 @@ public class Board extends JPanel implements Runnable, Commons {
 				if (key == KeyEvent.VK_SPACE) {
 
 					if (!shot.isVisible())
-						shot = new Shot(x, y);
+						shot = SpriteFactory.createSprite("shot", x, y); // used factory instead of new Shot()
 				}
 			}
 		}

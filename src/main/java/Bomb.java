@@ -4,7 +4,7 @@ import javax.swing.ImageIcon;
  * 
  * @author 
  */
-public class Bomb extends Sprite {
+public class Bomb extends Sprite implements Cloneable {
 
 	private final String bomb = "/img/bomb.png";
 	private boolean destroyed;
@@ -27,4 +27,14 @@ public class Bomb extends Sprite {
 	public boolean isDestroyed() {
 		return destroyed;
 	}
+
+	@Override
+    public Bomb clone() {
+        try {
+            return (Bomb) super.clone();
+        } catch(CloneNotSupportedException e){
+        e.printStackTrace();
+		return null;
+    }
+    }
 }
