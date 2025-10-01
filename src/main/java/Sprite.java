@@ -4,7 +4,7 @@ import java.awt.Image;
  * 
  * @author
  */
-public class Sprite {
+public class Sprite implements Cloneable{ // to tell the  java compiler  it is okay to copy instance of this class 
 
         private boolean visible;
         private Image image;
@@ -19,7 +19,12 @@ public class Sprite {
         public Sprite() {
             visible = true;
         }
+         
+       // Clone method for Prototype Pattern
 
+        public Sprite makeCopy() {
+            return null;
+        }
         public void die() {
             visible = false;
         }

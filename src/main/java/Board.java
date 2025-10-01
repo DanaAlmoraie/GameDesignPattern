@@ -32,6 +32,7 @@ public class Board extends JPanel implements Runnable, Commons {
 	private Sprite shot;              // changed declaration type to Sprite
 	private Sprite gameend;           // changed declaration type to Sprite
 	private Sprite vunnet;            // changed declaration type to Sprite
+	private SpriteFactory spriteFactory = new SpriteFactory(); // Make an object from SpriteFactory class
 
 	private int alienX = 150;
 	private int alienY = 25;
@@ -42,7 +43,7 @@ public class Board extends JPanel implements Runnable, Commons {
 	private boolean havewon = true;
 	private final String expl = "/img/explosion.png";
 	private final String alienpix = "/img/alien.png";
-	private String message = "Your planet belongs to us now...";
+	private String message = "Seu planeta nos pertence agora...";
 
 	private Thread animator;
 
@@ -88,24 +89,25 @@ public class Board extends JPanel implements Runnable, Commons {
 
 public void gameInit() {
     aliens = new ArrayList<Sprite>(); // added <Sprite> for generic type
+    ImageIcon ii = new ImageIcon(this.getClass().getResource(alienpix));  // Load alien image once
 
-    ImageIcon ii = new ImageIcon(this.getClass().getResource(alienpix));
     Image alienImg = ii.getImage();
 
-    SpriteFactory.initPrototypeAlien(alienX, alienY, alienImg);
+    spriteFactory.initPrototypeAlien(alienX, alienY, alienImg);     // Initialize a prototype Alien in the factory
 
+        // Clone the prototype Alien to fill the game grid
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 6; j++) {
-            Sprite alien = (Alien) SpriteFactory.createSprite(
+            Sprite alien = (Alien) spriteFactory.createSprite(
                 "alien",
                 alienX + 18 * j,
                 alienY + 18 * i
             ); // used factory instead of new Alien()
-            aliens.add(alien); 
+            aliens.add(alien); // add to list
         }
     }
-	player = SpriteFactory.createSprite("player", 0, 0); // used factory instead of new Player()
-	shot = SpriteFactory.createSprite("shot", 0, 0); // used factory instead of new Shot()
+	player = spriteFactory.createSprite("player", 0, 0); // used factory instead of new Player()
+	shot = spriteFactory.createSprite("shot", 0, 0); // used factory instead of new Shot()
 
 		if (animator == null || !ingame) {
 			animator = new Thread(this);
@@ -187,8 +189,8 @@ public void gameInit() {
 	public void gameOver() {
 		Graphics g = this.getGraphics();
 
-		gameend = SpriteFactory.createSprite("gameover", 0, 0); // used factory instead of new GameOver()
-		vunnet = SpriteFactory.createSprite("won", 0, 0); // used factory instead of new Won()
+		gameend = spriteFactory.createSprite("gameover", 0, 0); // used factory instead of new GameOver()
+		vunnet = spriteFactory.createSprite("won", 0, 0); // used factory instead of new Won()
 
 		// g.setColor(Color.black);
 		g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGTH);
@@ -214,7 +216,7 @@ public void gameInit() {
 	public void animationCycle() {
 		if (deaths == NUMBER_OF_ALIENS_TO_DESTROY) {
 			ingame = false;
-			message = "Congratulations! You saved the galaxy!!";
+			message = "Parab�ns! Voc� salvou a gal�xia!";
 		}
 
 		// player
@@ -293,7 +295,7 @@ public void gameInit() {
 				if (y > GROUND - ALIEN_HEIGHT) {
 					havewon = false;
 					ingame = false;
-					message = "Aliens are invading the galaxy!";
+					message = "Aliens est�o invadindo a gal�xia!";
 				}
 
 				((Alien) alien).act(direction); // added cast (Alien)
@@ -385,7 +387,7 @@ public void gameInit() {
 				if (key == KeyEvent.VK_SPACE) {
 
 					if (!shot.isVisible())
-						shot = SpriteFactory.createSprite("shot", x, y); // used factory instead of new Shot()
+						shot = spriteFactory.createSprite("shot", x, y); // used factory instead of new Shot()
 				}
 			}
 		}
