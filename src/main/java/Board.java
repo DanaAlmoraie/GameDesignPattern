@@ -91,8 +91,6 @@ public void gameInit() {
 
     Image alienImg = ii.getImage();
 
-    spriteFactory.createSprite("alien", 0, 0);   // Initialize a prototype Alien in the factory
-
         // Clone the prototype Alien to fill the game grid
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 6; j++) {
