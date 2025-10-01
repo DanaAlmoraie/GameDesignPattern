@@ -19,24 +19,24 @@ public class SpaceInvaders extends JFrame implements Commons {
 	 * Inicio
 	 */
 	private static final String TOP_MESSAGE = "Space Invaders <br> Java Version";
-	private static final String INITIAL_MESSAGE = "Ajude-nos, capitão impressionante!!"
-			+ "<br>Os alienígenas estão tentando invadir nosso planeta."
-			+ "<br><br><br>Sua missão:"
-			+ "<br><br>Matar todos os alienígenas invasores antes que eles consigam invadir o planeta Terra."
-			+ "<br>E, de preferência, não morra durante a batalha!"
-			+ "<br><br><br>BOA SORTE!!!";
+	private static final String INITIAL_MESSAGE = "Help us, Captain Awesome!!"
+			+ "<br>The aliens are trying to invade our planet."
+			+ "<br><br><br>Your mission:"
+			+ "<br><br>Kill all the invading aliens before they can invade planet Earth."
+			+ "<br>And, preferably, don't die during the battle!!"
+			+ "<br><br><br>GOOD LUCK!!!";
 	/*
-	 * Ajuda
+	 * Help
 	 */
-	private static final String HELP_TOP_MESSAGE = "Ajuda";
-	private static final String HELP_MESSAGE = "Controles: " 
-							+ "<br><br>Movimento à Esquerda: <br>Seta Esquerda do teclado"
-							+ "<br><br>Movimento à Direita: <br>Seta Direita do teclado"
-							+ "<br><br>Atirar: <br>Barra de espaço";
+	private static final String HELP_TOP_MESSAGE = "Help";
+	private static final String HELP_MESSAGE = "Controls: " 
+							+ "<br><br>Movement Left: <br>Left Arrow on the keyboard"
+							+ "<br><br>Movement Right: <br>Right Arrow on the keyboard"
+							+ "<br><br>Shoot: <br>Space bar";
 
 	JFrame frame = new JFrame("Space Invaders");
 	JFrame frame2 = new JFrame("Space Invaders");
-	JFrame frame3 = new JFrame("Ajuda");
+	JFrame frame3 = new JFrame("Help");
 
 	/*
 	 * Constructor
@@ -45,11 +45,11 @@ public class SpaceInvaders extends JFrame implements Commons {
 		String topmessage = "<html><br><br>" + TOP_MESSAGE + "</html>";
 		String message = "<html>" + INITIAL_MESSAGE + "</html>";
 
-		start = new JButton("Iniciar Missão");
+		start = new JButton("Start Mission");
 		start.addActionListener(new ButtonListener());
 		start.setBounds(800, 800, 200, 100);
 
-		help = new JButton("Ajuda");
+		help = new JButton("Help");
 		help.addActionListener(new HelpButton());
 
 		JLabel tekst = new JLabel(message, SwingConstants.CENTER);
@@ -117,7 +117,7 @@ public class SpaceInvaders extends JFrame implements Commons {
 
 	private class HelpButton implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
-			JButton close = new JButton("Fechar");
+			JButton close = new JButton("Close");
 			close.addActionListener(new CloseHelp());
 
 			String topmessage = "<html><br>" + HELP_TOP_MESSAGE + "</html>";

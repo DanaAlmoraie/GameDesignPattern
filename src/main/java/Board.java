@@ -42,7 +42,7 @@ public class Board extends JPanel implements Runnable, Commons {
 	private boolean havewon = true;
 	private final String expl = "/img/explosion.png";
 	private final String alienpix = "/img/alien.png";
-	private String message = "Seu planeta nos pertence agora...";
+	private String message = "Your planet belongs to us now...";
 
 	private Thread animator;
 
@@ -214,7 +214,7 @@ public void gameInit() {
 	public void animationCycle() {
 		if (deaths == NUMBER_OF_ALIENS_TO_DESTROY) {
 			ingame = false;
-			message = "Parab�ns! Voc� salvou a gal�xia!";
+			message = "Congratulations! You saved the galaxy!!";
 		}
 
 		// player
@@ -293,7 +293,7 @@ public void gameInit() {
 				if (y > GROUND - ALIEN_HEIGHT) {
 					havewon = false;
 					ingame = false;
-					message = "Aliens est�o invadindo a gal�xia!";
+					message = "Aliens are invading the galaxy!";
 				}
 
 				((Alien) alien).act(direction); // added cast (Alien)
