@@ -2,7 +2,7 @@ import java.awt.Image;
 
 public class SpriteFactory {
 
-    private static Alien alienPrototype;
+    private Alien alienPrototype;
 
     public void initPrototypeAlien(int x, int y, Image alienImage) {
         Alien proto = new Alien(x, y);// Create a new Alien object
