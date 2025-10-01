@@ -34,6 +34,7 @@ public class Alien extends Sprite {
 	public Sprite getBomb() {
 		return (Bomb) bomb; // added cast (Bomb)
 	}
+    
     // Clone method (deep copy needed because of Bomb)
     @Override
     public Sprite makeCopy(){

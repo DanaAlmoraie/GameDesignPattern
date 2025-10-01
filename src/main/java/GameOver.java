@@ -33,4 +33,11 @@ public class GameOver extends Sprite implements Commons {
 	public void setWidth(int width) {
 		this.width = width;
 	}
+
+	// override the method 
+	@Override
+	public Sprite makeCopy(){
+		return null;
+	}
+
 }

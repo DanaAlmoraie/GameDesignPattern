@@ -1,14 +1,7 @@
-import java.awt.Image;
 
 public class SpriteFactory {
 
-    private Alien alienPrototype;
-
-    public void initPrototypeAlien(int x, int y, Image alienImage) {
-        Alien proto = new Alien(x, y);// Create a new Alien object
-        proto.setImage(alienImage); // Set its image
-        alienPrototype = proto;
-    }
+    private Alien alienPrototype = new Alien(0, 0);
 
     public Sprite createSprite(String type, int x, int y) {
         switch (type.toLowerCase()) {
@@ -19,8 +12,7 @@ public class SpriteFactory {
                     clone.setX(x);
                     clone.setY(y);
                     return clone;
-                } else {
-                    
+                } else {                    
                     return new Alien(x, y); // If prototype not initialized, create a new Alien 
 
                 }

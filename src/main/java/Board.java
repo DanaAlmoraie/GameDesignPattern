@@ -7,11 +7,9 @@ import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
-
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
@@ -93,16 +91,12 @@ public void gameInit() {
 
     Image alienImg = ii.getImage();
 
-    spriteFactory.initPrototypeAlien(alienX, alienY, alienImg);     // Initialize a prototype Alien in the factory
+    spriteFactory.createSprite("alien", 0, 0);   // Initialize a prototype Alien in the factory
 
         // Clone the prototype Alien to fill the game grid
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 6; j++) {
-            Sprite alien = (Alien) spriteFactory.createSprite(
-                "alien",
-                alienX + 18 * j,
-                alienY + 18 * i
-            ); // used factory instead of new Alien()
+            Sprite alien = (Alien) spriteFactory.createSprite("alien", alienX + 18 * j,alienY + 18 * i); // used factory instead of new Alien()
             aliens.add(alien); // add to list
         }
     }
@@ -156,7 +150,7 @@ public void gameInit() {
 		Iterator<Sprite> i3 = aliens.iterator(); // added <Sprite> for casting
 
 		while (i3.hasNext()) {
-			Sprite a = i3.next(); // changed declaration type to Sprite
+			Sprite a = i3.next(); // changed declaration type from to Sprite 
 
 			Sprite b = ((Alien) a).getBomb(); // added cast (Alien) and changed the delare type to sprite
 

@@ -4,7 +4,8 @@ import java.awt.Image;
  * 
  * @author
  */
-public class Sprite implements Cloneable{ // to tell the  java compiler  it is okay to copy instance of this class 
+//changed the class to abstract
+public abstract class Sprite implements Cloneable{ // to tell the  java compiler  it is okay to copy instance of this class 
 
         private boolean visible;
         private Image image;
@@ -21,10 +22,8 @@ public class Sprite implements Cloneable{ // to tell the  java compiler  it is o
         }
          
        // Clone method for Prototype Pattern
+        public abstract Sprite makeCopy();
 
-        public Sprite makeCopy() {
-            return null;
-        }
         public void die() {
             visible = false;
         }

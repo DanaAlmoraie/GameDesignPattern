@@ -59,4 +59,11 @@ public class Player extends Sprite implements Commons {
 			dx = 0;
 		}
 	}
+
+	// override the method 
+	@Override
+	public Sprite makeCopy(){
+		return null;
+	}
+
 }
