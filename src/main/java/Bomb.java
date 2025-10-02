@@ -32,7 +32,7 @@ public class Bomb extends Sprite  {
 	public Sprite makeCopy() {
 		Bomb bombObject=null;   // Create a variable to hold the cloned Bomb object
 		try {
-			bombObject=(Bomb) super.clone(); // Perform a copy of the  using Object.clone()
+			bombObject= (Bomb) super.clone(); // Perform a copy of the  using Object.clone()
 		} catch (CloneNotSupportedException e) {
             e.printStackTrace();	  // Print error if cloning is not supported
 			}

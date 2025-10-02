@@ -8,7 +8,7 @@ public class SpriteFactory {
 
             case "alien":
                 if (alienPrototype != null) {  // Check if the Alien prototype has been initialized
-                    Sprite clone = alienPrototype.makeCopy(); 
+                    Alien clone = (Alien) alienPrototype.makeCopy(); 
                     clone.setX(x);
                     clone.setY(y);
                     return clone;
