@@ -12,3 +12,4 @@ src/main/java/Bomb.class
 src/main/java/Board$TAdapter.class
 src/main/java/Board.class
 src/main/java/Alien.class
+src/main/java/SpriteFactory.class
