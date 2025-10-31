@@ -13,6 +13,7 @@ public abstract class Sprite implements Cloneable{ // to tell the  java compiler
         protected int y;
         protected boolean dying;
         protected int dx;
+        private static Alien alienPrototype = new Alien(0, 0);
 
         /*
          * Constructor
@@ -66,4 +67,31 @@ public abstract class Sprite implements Cloneable{ // to tell the  java compiler
         public boolean isDying() {
             return this.dying;
         }
+
+        public static Sprite createSprite(String type, int x, int y) {
+            switch (type.toLowerCase()) {
+                case "alien":
+                    if (alienPrototype != null) {
+                        Alien clone = (Alien) alienPrototype.makeCopy();
+                        clone.setX(x);
+                        clone.setY(y);
+                        return clone;
+                    } else {
+                        return new Alien(x, y);
+                    }
+                case "bomb":
+                    return new Bomb(x, y);
+                case "player":
+                    return new Player();
+                case "shot":
+                    return new Shot(x, y);
+                case "gameover":
+                    return new GameOver();
+                case "won":
+                    return new Won();
+                default:
+                    throw new IllegalArgumentException("Unknown sprite type: " + type);
+            }
+        }
+
 }

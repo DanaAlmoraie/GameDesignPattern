@@ -7,7 +7,6 @@ import javax.swing.ImageIcon;
 public class Alien extends Sprite {
 
     private Sprite bomb; // changed declaration type to Sprite
-    private SpriteFactory spriteFactory = new SpriteFactory(); // Make an object from SpriteFactory class
     private final String alien = "/img/alien.png";
 
     /*
@@ -17,7 +16,7 @@ public class Alien extends Sprite {
         this.x = x;
         this.y = y;
 
-        bomb = spriteFactory.createSprite("bomb", x, y); // used factory instead of new Bomb()
+        bomb = Sprite.createSprite("bomb", x, y); // used factory instead of new Bomb()
         ImageIcon ii = new ImageIcon(this.getClass().getResource(alien));
         setImage(ii.getImage());
 

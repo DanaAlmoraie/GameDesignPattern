@@ -30,7 +30,6 @@ public class Board extends JPanel implements Runnable, Commons {
 	private Sprite shot;              // changed declaration type to Sprite
 	private Sprite gameend;           // changed declaration type to Sprite
 	private Sprite vunnet;            // changed declaration type to Sprite
-	private SpriteFactory spriteFactory = new SpriteFactory(); // Make an object from SpriteFactory class
 
 	private int alienX = 150;
 	private int alienY = 25;
@@ -94,12 +93,12 @@ public void gameInit() {
         // Clone the prototype Alien to fill the game grid
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 6; j++) {
-            Sprite alien = (Alien) spriteFactory.createSprite("alien", alienX + 18 * j,alienY + 18 * i); // used factory instead of new Alien()
+            Sprite alien = (Alien) Sprite.createSprite("alien", alienX + 18 * j,alienY + 18 * i); // used factory instead of new Alien()
             aliens.add(alien); // add to list
         }
     }
-	player = spriteFactory.createSprite("player", 0, 0); // used factory instead of new Player()
-	shot = spriteFactory.createSprite("shot", 0, 0); // used factory instead of new Shot()
+	player = Sprite.createSprite("player", 0, 0); // used factory instead of new Player()
+	shot = Sprite.createSprite("shot", 0, 0); // used factory instead of new Shot()
 
 		if (animator == null || !ingame) {
 			animator = new Thread(this);
@@ -181,8 +180,8 @@ public void gameInit() {
 	public void gameOver() {
 		Graphics g = this.getGraphics();
 
-		gameend = spriteFactory.createSprite("gameover", 0, 0); // used factory instead of new GameOver()
-		vunnet = spriteFactory.createSprite("won", 0, 0); // used factory instead of new Won()
+		gameend = Sprite.createSprite("gameover", 0, 0); // used factory instead of new GameOver()
+		vunnet = Sprite.createSprite("won", 0, 0); // used factory instead of new Won()
 
 		// g.setColor(Color.black);
 		g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGTH);
@@ -379,7 +378,7 @@ public void gameInit() {
 				if (key == KeyEvent.VK_SPACE) {
 
 					if (!shot.isVisible())
-						shot = spriteFactory.createSprite("shot", x, y); // used factory instead of new Shot()
+						shot = Sprite.createSprite("shot", x, y); // used factory instead of new Shot()
 				}
 			}
 		}
