@@ -13,3 +13,11 @@ src/main/java/Board$TAdapter.class
 src/main/java/Board.class
 src/main/java/Alien.class
 src/main/java/SpriteFactory.class
+src/main/java/BatmanTheme.class
+src/main/java/ClassicTheme.class
+src/main/java/HelloKittyTheme.class
+src/main/java/ImageProxy.class
+src/main/java/PushPanel.class
+src/main/java/PushPanel$ButtonListener.class
+src/main/java/Theme.class
+src/main/java/imageFlyweight.class
