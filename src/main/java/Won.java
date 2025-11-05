@@ -1,11 +1,10 @@
-import javax.swing.ImageIcon;
+import java.awt.Image;
 
 /**
  * 
  * @author 
  */
 public class Won extends Sprite implements Commons{
-    private final String won = "/img/won.jpg";
     private int width;
 
     /*
@@ -13,11 +12,12 @@ public class Won extends Sprite implements Commons{
      */
     public Won() {
 
-        ImageIcon ii = new ImageIcon(this.getClass().getResource(won));
+        //Bridge: set the image according to theme
+        Image wonImage = Sprite.getTheme().getWonImage();
 
-        width = ii.getImage().getWidth(null); 
+        width = wonImage.getWidth(null); 
 
-        setImage(ii.getImage());
+        setImage(wonImage);
         setX(0);
         setY(0);
     }

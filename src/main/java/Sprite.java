@@ -13,13 +13,22 @@ public abstract class Sprite implements Cloneable{ // to tell the  java compiler
         protected int y;
         protected boolean dying;
         protected int dx;
-        private static Alien alienPrototype = new Alien(0, 0);
+        private static Alien alienPrototype = null;
+        protected static Theme theme = new ClassicTheme();
 
         /*
          * Constructor
          */
         public Sprite() {
             visible = true;
+        }
+
+        public static void setTheme(Theme newTheme) {
+        theme = newTheme;
+        }
+
+        public static Theme getTheme() {
+            return theme;
         }
          
        // Clone method for Prototype Pattern
@@ -71,14 +80,13 @@ public abstract class Sprite implements Cloneable{ // to tell the  java compiler
         public static Sprite createSprite(String type, int x, int y) {
             switch (type.toLowerCase()) {
                 case "alien":
-                    if (alienPrototype != null) {
-                        Alien clone = (Alien) alienPrototype.makeCopy();
-                        clone.setX(x);
-                        clone.setY(y);
-                        return clone;
-                    } else {
-                        return new Alien(x, y);
+                    if (alienPrototype == null) {
+                        alienPrototype = new Alien(0, 0);
                     }
+                    Alien clone = (Alien) alienPrototype.makeCopy();
+                    clone.setX(x);
+                    clone.setY(y);
+                    return clone;
                 case "bomb":
                     return new Bomb(x, y);
                 case "player":

@@ -1,4 +1,4 @@
-import javax.swing.ImageIcon;
+import java.awt.Image;
 
 /**
  * 
@@ -6,18 +6,18 @@ import javax.swing.ImageIcon;
  */
 public class GameOver extends Sprite implements Commons {
 
-	private final String gameOver = "/img/gameover.png";
 	private int width;
 
 	/*
 	 * Constructor
 	 */
 	public GameOver() {
-		ImageIcon ii = new ImageIcon(this.getClass().getResource(gameOver));
+		//Bridge: set the image according to theme
+		Image gameOverImage = Sprite.getTheme().getGameOverImage();
 
-		setWidth(ii.getImage().getWidth(null));
+		setWidth(gameOverImage.getWidth(null));
 
-		setImage(ii.getImage());
+		setImage(gameOverImage);
 		setX(0);
 		setY(0);
 	}

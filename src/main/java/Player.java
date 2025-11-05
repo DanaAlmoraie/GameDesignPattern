@@ -1,6 +1,5 @@
+import java.awt.Image;
 import java.awt.event.KeyEvent;
-
-import javax.swing.ImageIcon;
 
 /**
  * 
@@ -11,18 +10,18 @@ public class Player extends Sprite implements Commons {
 	private final int START_Y = 400;
 	private final int START_X = 270;
 
-	private final String player = "/img/craft.png";
 	private int width;
 
 	/*
 	 * Constructor
 	 */
 	public Player() {
-		ImageIcon ii = new ImageIcon(this.getClass().getResource(player));
+		//Bridge: set the image according to theme
+		Image playerImage = Sprite.getTheme().getPlayerImage();
 
-		width = ii.getImage().getWidth(null);
+		width = playerImage.getWidth(null);
 
-		setImage(ii.getImage());
+		setImage(playerImage);
 		setX(START_X);
 		setY(START_Y);
 	}

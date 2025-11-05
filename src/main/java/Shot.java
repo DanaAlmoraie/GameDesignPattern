@@ -1,9 +1,7 @@
-import javax.swing.ImageIcon;
 
 
 public class Shot extends Sprite {
 
-    private String shot = "/img/shot.png";
     private final int H_SPACE = 6;
     private final int V_SPACE = 1;
 
@@ -12,8 +10,8 @@ public class Shot extends Sprite {
 
     public Shot(int x, int y) {
 
-        ImageIcon ii = new ImageIcon(this.getClass().getResource(shot));
-        setImage(ii.getImage());
+        //Bridge: set the image according to theme
+        setImage(Sprite.getTheme().getShotImage());
         setX(x + H_SPACE);
         setY(y - V_SPACE);
     }

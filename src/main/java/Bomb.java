@@ -1,4 +1,3 @@
-import javax.swing.ImageIcon;
 
 /**
  * 
@@ -6,7 +5,6 @@ import javax.swing.ImageIcon;
  */
 public class Bomb extends Sprite  {
 
-	private final String bomb = "/img/bomb.png";
 	private boolean destroyed;
 
 	/*
@@ -16,8 +14,8 @@ public class Bomb extends Sprite  {
 		setDestroyed(true);
 		this.x = x;
 		this.y = y;
-		ImageIcon ii = new ImageIcon(this.getClass().getResource(bomb));
-		setImage(ii.getImage());
+		//Bridge: set the image according to theme
+		setImage(Sprite.getTheme().getBombImage());
 	}
 
 	public void setDestroyed(boolean destroyed) {

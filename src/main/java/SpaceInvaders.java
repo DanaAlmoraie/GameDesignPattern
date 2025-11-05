@@ -14,6 +14,7 @@ public class SpaceInvaders extends JFrame implements Commons {
 	private static final long serialVersionUID = -4905230094675077405L;
 
 	private JButton start, help;
+	private JComboBox<String> skinSelector;
 	
 	/*
 	 * Inicio
@@ -61,14 +62,31 @@ public class SpaceInvaders extends JFrame implements Commons {
 		Font font2 = new Font("Helvetica", Font.BOLD, 20);
 		toptekst.setFont(font2);
 
+		//List to choose the theme
+		String[] skins = {"Classic", "Hello Kitty", "Batman"};
+        skinSelector = new JComboBox<>(skins);
+
+        JPanel optionsPanel = new JPanel();
+        optionsPanel.add(new JLabel("Choose theme:"));
+        optionsPanel.add(skinSelector);
+
 		frame2.setTitle("Space Invaders");
 
-		frame2.add(tekst);
+		JPanel centerPanel = new JPanel();
+		centerPanel.setLayout(new BorderLayout());
+		centerPanel.add(tekst, BorderLayout.CENTER);
+		centerPanel.add(optionsPanel, BorderLayout.SOUTH);
+
+		centerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
 
 		frame2.add(toptekst, BorderLayout.PAGE_START);
+
+		frame2.add(centerPanel, BorderLayout.CENTER);
+
 		JPanel nedredel = new JPanel();
 		nedredel.add(help);
 		nedredel.add(start);
+
 
 		frame2.add(nedredel, BorderLayout.PAGE_END);
 		frame2.setSize(500, 500);
@@ -97,10 +115,21 @@ public class SpaceInvaders extends JFrame implements Commons {
 	private class ButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent event) {
+			String selectedTheme = (String) skinSelector.getSelectedItem();
+
+
+			// Send the selected theme to the Sprite
+			if (selectedTheme.equalsIgnoreCase("Hello Kitty")) {
+				Sprite.setTheme(new HelloKittyTheme());
+			} else if (selectedTheme.equalsIgnoreCase("Classic")) {
+				Sprite.setTheme(new ClassicTheme());
+			} else if (selectedTheme.equalsIgnoreCase("Batman")) {
+				Sprite.setTheme(new BatmanTheme());
+			}
 
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setSize(BOARD_WIDTH, BOARD_HEIGTH);
-			frame.getContentPane().add(new Board());
+			frame.getContentPane().add(new Board()); 
 			frame.setResizable(false);
 			frame.setLocationRelativeTo(null);
 			frame.setVisible(true);

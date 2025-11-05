@@ -1,4 +1,3 @@
-import javax.swing.ImageIcon;
 
 /**
  * 
@@ -7,7 +6,6 @@ import javax.swing.ImageIcon;
 public class Alien extends Sprite {
 
     private Sprite bomb; // changed declaration type to Sprite
-    private final String alien = "/img/alien.png";
 
     /*
      * Constructor
@@ -17,8 +15,8 @@ public class Alien extends Sprite {
         this.y = y;
 
         bomb = Sprite.createSprite("bomb", x, y); // used factory instead of new Bomb()
-        ImageIcon ii = new ImageIcon(this.getClass().getResource(alien));
-        setImage(ii.getImage());
+        //Bridge: set the image according to theme
+        setImage(Sprite.getTheme().getAlienImage());
 
     }
 

@@ -3,7 +3,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
- import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -39,8 +38,6 @@ public class Board extends JPanel implements Runnable, Commons {
 	private boolean ingame = true;
 	private boolean havewon = true;
 	private final String expl = "/img/explosion.png";
-	private final String alienpix = "/img/alien.png";
-	private String message = "Seu planeta nos pertence agora...";
 
 	private Thread animator;
 
@@ -62,49 +59,24 @@ public class Board extends JPanel implements Runnable, Commons {
 		gameInit();
 	}
 
-	// public void gameInit() {
-	// 	aliens = new ArrayList<Sprite>(); // added <Sprite> for generic type
+	public void gameInit() {
+		aliens = new ArrayList<Sprite>(); // added <Sprite> for generic type
 
-	// 	ImageIcon ii = new ImageIcon(this.getClass().getResource(alienpix));
-
-	// 	for (int i = 0; i < 4; i++) {
-	// 		for (int j = 0; j < 6; j++) {
-	// 			Sprite alien = SpriteFactory.createSprite("alien", alienX + 18 * j, alienY + 18 * i); // used factory instead of new Alien()
-	// 			alien.setImage(ii.getImage());
-	// 			aliens.add(alien);
-	// 		}
-	// 	}
-
-	// 	player = SpriteFactory.createSprite("player", 0, 0); // used factory instead of new Player()
-	// 	shot = SpriteFactory.createSprite("shot", 0, 0); // used factory instead of new Shot()
-
-	// 	if (animator == null || !ingame) {
-	// 		animator = new Thread(this);
-	// 		animator.start();
-	// 	}
-	// }
-
-public void gameInit() {
-    aliens = new ArrayList<Sprite>(); // added <Sprite> for generic type
-    ImageIcon ii = new ImageIcon(this.getClass().getResource(alienpix));  // Load alien image once
-
-    Image alienImg = ii.getImage();
-
-        // Clone the prototype Alien to fill the game grid
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 6; j++) {
-            Sprite alien = (Alien) Sprite.createSprite("alien", alienX + 18 * j,alienY + 18 * i); // used factory instead of new Alien()
-            aliens.add(alien); // add to list
-        }
-    }
-	player = Sprite.createSprite("player", 0, 0); // used factory instead of new Player()
-	shot = Sprite.createSprite("shot", 0, 0); // used factory instead of new Shot()
+			// Clone the prototype Alien to fill the game grid
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 6; j++) {
+				Sprite alien = (Alien) Sprite.createSprite("alien", alienX + 18 * j,alienY + 18 * i); // used factory instead of new Alien()
+				aliens.add(alien); // add to list
+			}
+		}
+		player = Sprite.createSprite("player", 0, 0); // used factory instead of new Player()
+		shot = Sprite.createSprite("shot", 0, 0); // used factory instead of new Shot()
 
 		if (animator == null || !ingame) {
 			animator = new Thread(this);
 			animator.start();
 		}
-}
+	}
 
 	public void drawAliens(Graphics g) {
 		Iterator<Sprite> it = aliens.iterator(); // added <Sprite> for casting
@@ -160,7 +132,8 @@ public void gameInit() {
 	public void paint(Graphics g) {
 		super.paint(g);
 
-		g.setColor(Color.black);
+		//Bridge: set the background color according to theme
+		g.setColor(Sprite.getTheme().getBackgroundColor());
 		g.fillRect(0, 0, d.width, d.height);
 		g.setColor(Color.green);
 
@@ -180,34 +153,24 @@ public void gameInit() {
 	public void gameOver() {
 		Graphics g = this.getGraphics();
 
-		gameend = Sprite.createSprite("gameover", 0, 0); // used factory instead of new GameOver()
-		vunnet = Sprite.createSprite("won", 0, 0); // used factory instead of new Won()
+		gameend = Sprite.createSprite("gameover", 0, 0);
+		vunnet = Sprite.createSprite("won", 0, 0);
 
-		// g.setColor(Color.black);
 		g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGTH);
-		if (havewon == true) {
+		if (havewon) {
 			g.drawImage(vunnet.getImage(), 0, 0, this);
 		} else {
 			g.drawImage(gameend.getImage(), 0, 0, this);
 		}
-		g.setColor(new Color(0, 32, 48));
-		g.fillRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
-		g.setColor(Color.white);
-		g.drawRect(50, BOARD_WIDTH / 2 - 30, BOARD_WIDTH - 100, 50);
 
-		Font small = new Font("Helvetica", Font.BOLD, 14);
-		FontMetrics metr = this.getFontMetrics(small);
-
-		g.setColor(Color.white);
-		g.setFont(small);
-		g.drawString(message, (BOARD_WIDTH - metr.stringWidth(message)) / 2,
-				BOARD_WIDTH / 2);
+		Toolkit.getDefaultToolkit().sync();
+		g.dispose();
 	}
+
 
 	public void animationCycle() {
 		if (deaths == NUMBER_OF_ALIENS_TO_DESTROY) {
 			ingame = false;
-			message = "Parab�ns! Voc� salvou a gal�xia!";
 		}
 
 		// player
@@ -286,7 +249,6 @@ public void gameInit() {
 				if (y > GROUND - ALIEN_HEIGHT) {
 					havewon = false;
 					ingame = false;
-					message = "Aliens est�o invadindo a gal�xia!";
 				}
 
 				((Alien) alien).act(direction); // added cast (Alien)
