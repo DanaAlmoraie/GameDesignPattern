@@ -1,5 +1,4 @@
 import java.awt.Image;
-import java.awt.event.KeyEvent;
 
 /**
  * 
@@ -34,31 +33,21 @@ public class Player extends Sprite implements Commons {
 			x = BOARD_WIDTH - 2 * width;
 	}
 
-	public void keyPressed(KeyEvent e) {
-		int key = e.getKeyCode();
+	
+    // === Methods used by Command pattern ===
+    public void moveLeft() {
+        dx = -2;
+    }
 
-		if (key == KeyEvent.VK_LEFT) {
-			dx = -2;
-		}
+    public void moveRight() {
+        dx = 2;
+    }
 
-		if (key == KeyEvent.VK_RIGHT) {
-			dx = 2;
-		}
+    public void stopMoving() {
+        dx = 0;
+    }
 
-	}
-
-	public void keyReleased(KeyEvent e) {
-		int key = e.getKeyCode();
-
-		if (key == KeyEvent.VK_LEFT) {
-			dx = 0;
-		}
-
-		if (key == KeyEvent.VK_RIGHT) {
-			dx = 0;
-		}
-	}
-
+	
 	// override the method 
 	@Override
 	public Sprite makeCopy(){

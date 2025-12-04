@@ -1,7 +1,5 @@
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.event.KeyAdapter;
@@ -41,6 +39,11 @@ public class Board extends JPanel implements Runnable, Commons {
 
 	private Thread animator;
 
+    // ====== State pattern fields ======
+    private GameState playingState;
+    private GameState pausedState;
+    private GameState currentState;
+
 	/*
 	 * Constructor
 	 */
@@ -72,11 +75,45 @@ public class Board extends JPanel implements Runnable, Commons {
 		player = Sprite.createSprite("player", 0, 0); // used factory instead of new Player()
 		shot = Sprite.createSprite("shot", 0, 0); // used factory instead of new Shot()
 
-		if (animator == null || !ingame) {
+		        // ====== إنشاء الحالات (State objects) ======
+			playingState = new PlayingState(this);
+			pausedState  = new PausedState(this);
+			currentState = playingState;
+
+			ingame = true;
+			havewon = true;
+			deaths = 0;
+
+
+		if (animator == null || !animator.isAlive()) {
 			animator = new Thread(this);
 			animator.start();
 		}
 	}
+
+	    // ====== State helpers ======
+    public void setState(GameState state) {
+        this.currentState = state;
+    }
+
+    public GameState getPlayingState() {
+        return playingState;
+    }
+
+    public GameState getPausedState() {
+        return pausedState;
+    }
+
+    // تُستدعى من TogglePauseCommand
+    public void togglePause() {
+    if (currentState == playingState) {
+			((Player) player).stopMoving(); // added cast (Player)
+			setState(pausedState);
+		} else if (currentState == pausedState) {
+			setState(playingState);
+		}
+	}
+
 
 	public void drawAliens(Graphics g) {
 		Iterator<Sprite> it = aliens.iterator(); // added <Sprite> for casting
@@ -144,10 +181,16 @@ public class Board extends JPanel implements Runnable, Commons {
 			drawPlayer(g);
 			drawShot(g);
 			drawBombing(g);
+
+			// عرض كلمة PAUSED لو اللعبة متوقفة
+            if (currentState == pausedState) {
+                g.setColor(Color.WHITE);
+                g.drawString("PAUSED (press P to resume)", 10, 20);
+            }
+
 		}
 
 		Toolkit.getDefaultToolkit().sync();
-		g.dispose();
 	}
 
 	public void gameOver() {
@@ -305,7 +348,9 @@ public class Board extends JPanel implements Runnable, Commons {
 
 		while (ingame) {
 			repaint();
-			animationCycle();
+			
+			// ======= استدعاء update حسب الحالة الحالية (State pattern) =======
+		    currentState.update();
 
 			timeDiff = System.currentTimeMillis() - beforeTime;
 			sleep = DELAY - timeDiff;
@@ -323,26 +368,61 @@ public class Board extends JPanel implements Runnable, Commons {
 	}
 
 	private class TAdapter extends KeyAdapter {
+		private Command command;
 
 		public void keyReleased(KeyEvent e) {
-			((Player) player).keyReleased(e); // added cast (Player)
-		}
+            if (!ingame) return;
 
-		public void keyPressed(KeyEvent e) {
+			int key = e.getKeyCode();
 
-			((Player) player).keyPressed(e); // added cast (Player)
+			switch (key) {
+				case KeyEvent.VK_LEFT:
+				case KeyEvent.VK_RIGHT:
+					command = new StopMoveCommand((Player)player);
+					break;
+				default:
+					command = null;
+			}
 
-			int x = player.getX();
-			int y = player.getY();
+			if (command != null) {
+            	currentState.handleInput(command);
+        	}
 
-			if (ingame) {
+        }
+
+
+		    public void keyPressed(KeyEvent e) {
+
 				int key = e.getKeyCode();
-				if (key == KeyEvent.VK_SPACE) {
 
-					if (!shot.isVisible())
-						shot = Sprite.createSprite("shot", x, y); // used factory instead of new Shot()
+				if (ingame) {
+					// إطلاق النار يبقى كما هو
+					int x = player.getX();
+					int y = player.getY();
+
+					if (key == KeyEvent.VK_SPACE) {
+						if (!shot.isVisible())
+							shot = Sprite.createSprite("shot", x, y); // used factory instead of new Shot()
+					}
+
+					switch (key) {
+						case KeyEvent.VK_LEFT:
+							command = new MoveLeftCommand((Player)player);
+							break;
+						case KeyEvent.VK_RIGHT:
+							command = new MoveRightCommand((Player)player);
+							break;
+						case KeyEvent.VK_P:      // Pause / Resume
+							command = new TogglePauseCommand(Board.this);
+							break;
+						default:
+							command = null;
+					}
+
+					if (command != null) {
+						currentState.handleInput(command);
+					}
 				}
 			}
-		}
 	}
 }
