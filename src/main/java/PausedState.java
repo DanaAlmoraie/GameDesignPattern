@@ -1,21 +1,17 @@
 public class PausedState implements GameState {
 
-    private Board board;
 
-    public PausedState(Board board) {
-        this.board = board;
+    public PausedState() {
     }
 
+    // the player doesn't move because the game is paused
     @Override
     public void handleInput(Command command) {
-        // أثناء الإيقاف المؤقت نسمح فقط بأمر الـ TogglePause
-        if (command instanceof TogglePauseCommand) {
-            command.execute();
-        }
+      
     }
 
     @Override
     public void update() {
-        // لا شيء: اللعبة متوقفة عند نفس الإحداثيات (Player + Aliens + Bombs)
+        // here we do nothing because the game is paused
     }
 }

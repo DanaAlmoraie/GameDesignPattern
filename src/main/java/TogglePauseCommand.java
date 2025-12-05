@@ -1,13 +1,13 @@
-public class TogglePauseCommand implements Command {
+// public class TogglePauseCommand implements Command {
 
-    private Board board;
+//     private Board board;
 
-    public TogglePauseCommand(Board board) {
-        this.board = board;
-    }
+//     public TogglePauseCommand(Board board) {
+//         this.board = board;
+//     }
 
-    @Override
-    public void execute() {
-        board.togglePause();
-    }
-}
+//     @Override
+//     public void execute() {
+//         board.togglePause();
+//     }
+// }

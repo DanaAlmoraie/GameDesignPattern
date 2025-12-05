@@ -77,7 +77,7 @@ public class Board extends JPanel implements Runnable, Commons {
 
 		        // ====== إنشاء الحالات (State objects) ======
 			playingState = new PlayingState(this);
-			pausedState  = new PausedState(this);
+			pausedState  = new PausedState();
 			currentState = playingState;
 
 			ingame = true;
@@ -104,10 +104,8 @@ public class Board extends JPanel implements Runnable, Commons {
         return pausedState;
     }
 
-    // تُستدعى من TogglePauseCommand
     public void togglePause() {
     if (currentState == playingState) {
-			((Player) player).stopMoving(); // added cast (Player)
 			setState(pausedState);
 		} else if (currentState == pausedState) {
 			setState(playingState);
@@ -413,8 +411,9 @@ public class Board extends JPanel implements Runnable, Commons {
 							command = new MoveRightCommand((Player)player);
 							break;
 						case KeyEvent.VK_P:      // Pause / Resume
-							command = new TogglePauseCommand(Board.this);
-							break;
+							// command = new TogglePauseCommand(Board.this);
+							Board.this.togglePause();
+							return;  
 						default:
 							command = null;
 					}
